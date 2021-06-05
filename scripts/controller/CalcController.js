@@ -202,8 +202,10 @@ class CalcController {
                 /*parseInt converte Uma string por número.
                 this.setLastOperation(parseInt(newValue));*/
 
-                //parseFloat analisa um argumento string, e retorna um numero de ponto flutuante. Se ele encontrar um carácter diferente de um sinal (+ ou -), numeral (0-9), um ponto decimal, ou um expoente, ele retorna o valor até esse ponto e ignora esse caractere e todos os caracteres seguintes. Espaços a direita e a esquerda são permitidos.
-                this.setLastOperation(parseFloat(newValue));
+                /*parseFloat analisa um argumento string, e retorna um numero de ponto flutuante. Se ele encontrar um carácter diferente de um sinal (+ ou -), numeral (0-9), um ponto decimal, ou um expoente, ele retorna o valor até esse ponto e ignora esse caractere e todos os caracteres seguintes. Espaços a direita e a esquerda são permitidos.
+                this.setLastOperation(parseFloat(newValue));*/
+
+                this.setLastOperation(newValue);
 
                 //atualizar display
                 this.setLastNumberToDisplay();
@@ -220,6 +222,8 @@ class CalcController {
     addDot(){
 
         let lastOperation = this.getLastOperation();
+
+        if (typeof lastOperation === 'string' && lastOperation.split('').indexOf('.') > -1) return;
 
         //Pipe Pipe (||) significa or, ou em inglês.
         if(this.isOperator(lastOperation) || !lastOperation){
