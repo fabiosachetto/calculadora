@@ -44,6 +44,9 @@ class CalcController {
     clearAll(){
         this._operation = [];
 
+        this._lastNumber = '';
+        this._lastOperator = '';
+
         this.setLastNumberToDisplay();
     }
 
@@ -177,10 +180,6 @@ class CalcController {
                 //Aqui troca o operador
                 this.setLastOperation(value);
 
-            } else if(isNaN(value)) {
-                //Outra coisa
-                console.log("Outra coisa", value);
-
             } else {
 
                 this.pushOperation(value);
@@ -200,8 +199,11 @@ class CalcController {
 
                 //Se for Number vai cair Aqui 
                 let newValue = this.getLastOperation().toString() + value.toString();
-                //parseInt converte Uma string por número.
-                this.setLastOperation(parseInt(newValue));
+                /*parseInt converte Uma string por número.
+                this.setLastOperation(parseInt(newValue));*/
+
+                //parseFloat analisa um argumento string, e retorna um numero de ponto flutuante. Se ele encontrar um carácter diferente de um sinal (+ ou -), numeral (0-9), um ponto decimal, ou um expoente, ele retorna o valor até esse ponto e ignora esse caractere e todos os caracteres seguintes. Espaços a direita e a esquerda são permitidos.
+                this.setLastOperation(parseFloat(newValue));
 
                 //atualizar display
                 this.setLastNumberToDisplay();
@@ -213,6 +215,20 @@ class CalcController {
 
     setError(){
         this.displayCalc = "Error";
+    }
+
+    addDot(){
+
+        let lastOperation = this.getLastOperation();
+
+        //Pipe Pipe (||) significa or, ou em inglês.
+        if(this.isOperator(lastOperation) || !lastOperation){
+            this.pushOperation('0.');
+        } else {
+            this.setLastOperation(lastOperation.toString() + '.');
+        }
+
+        this.setLastNumberToDisplay();
     }
 
     execBtn(value){
@@ -250,7 +266,7 @@ class CalcController {
                 break;
             
             case 'ponto':
-                this.addOperation('.');
+                this.addDot('.');
                 break;
 
             case '0':
