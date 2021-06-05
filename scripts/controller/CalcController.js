@@ -14,6 +14,7 @@ class CalcController {
         this._currentDate;
         this.initialize();
         this.initButtonsEvents();
+        this.initKeyboard();
     }
 
     //Método principal do projeto ( Tudo o que acontecer na calculadora vai vir desse método)
@@ -33,9 +34,62 @@ class CalcController {
 
     }
 
+    //Método para capturar eventos do teclado
+    initKeyboard(){
+        document.addEventListener('keyup', e => {
+            //console.log(e.key);
+
+            switch(e.key){
+                case 'Escape':
+                    this.clearAll();
+                    break;
+                    
+                case 'Backspace':
+                    this.clearEntry();
+                    break;
+                    
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                case '%':
+                    this.addOperation(e.key);
+                    break;
+
+                case '=':                    
+                case 'Enter':
+                    this.calc();
+                    break;
+                
+                case '.':
+                case ',':
+                    this.addDot();
+                    break;
+    
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    this.addOperation(parseInt(e.key));
+                    break;
+    
+                /*default:
+                    this.setError();
+                    break;
+                */
+            }
+        });
+    }
+
     addEventListenerAll(element, events, fn) {
         //O método split() divide uma string em um array de strings de acordo com algum separador
-        events.split(" ").forEach(event => {
+        events.split(' ').forEach(event => {
             element.addEventListener(event, fn, false);
         })
 
@@ -66,7 +120,9 @@ class CalcController {
     }
 
     isOperator(value){
+
         return (['+', '-', '*', '%', '/'].indexOf(value) > -1);
+        
     }
 
     pushOperation(value){
