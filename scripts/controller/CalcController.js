@@ -467,6 +467,12 @@ class CalcController {
     //Set altera o valor q esta inserido
     set displayCalc(value) {
 
+        if(value.toString().length > 10) {
+            this.setError();
+            //Esse return serve para não sair do if, ou seja, não ir para o return abaixo.
+            return false;
+        }
+
         return this._displayCalcEl.innerHTML = value;
         
     }
