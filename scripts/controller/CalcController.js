@@ -17,6 +17,40 @@ class CalcController {
         this.initKeyboard();
     }
 
+    //Método criado para funcionar o CTRL + V
+    pasteFromClipboard(){
+        //O método addEventListener anexa um manipulador de eventos a um elemento sem sobrescrever os manipuladores de eventos existentes. Ao usar o método addEventListener (), o JavaScript é separado da marcação HTML, para melhor legibilidade e permite adicionar ouvintes de eventos mesmo quando você não controla a marcação HTML.
+        document.addEventListener('paste', e => {
+
+            let text = e.clipboardData.getData('Text');
+
+            //Verifica se o texto colado é número para aparecer no display, se não for número aparece a mensagem NAN
+            this.displayCalc = parseFloat(text);
+
+        })
+    }
+
+    //Método criado para funcionar o CTRL + C
+    copToClipboard(){
+        //Criando elemento input na tela dinamicamente, para ser possível selecionar o conteúdo inserido. Por ser SVG não é tão simples só pegar no HTML
+        let input = document.createElement('input');
+
+        //Adicionando o valor digitado dentro do elemento input
+        input.value = this.displayCalc;
+
+        //Adicionando o elemento input dentro do body para ser possível visualizar
+        document.body.appendChild(input);
+
+        //Acessando o conteúdo do input, ou seja, o conteúdo já esta selecionado
+        input.select();
+
+        //Pegar a informação q esta selecionada no input e copiar no Sistema Operacional
+        document.execCommand("Copy");
+
+        //Para não aparecer na tela ao digitar Ctrl + C
+        input.remove();
+    }
+
     //Método principal do projeto ( Tudo o que acontecer na calculadora vai vir desse método)
     initialize(){
 
@@ -31,6 +65,8 @@ class CalcController {
         
         //setLastNumberToDisplay para quando iniciar a calculadora aparecer o número 0
         this.setLastNumberToDisplay();
+
+        this.pasteFromClipboard();
 
     }
 
@@ -78,6 +114,10 @@ class CalcController {
                 case '9':
                     this.addOperation(parseInt(e.key));
                     break;
+
+                case 'c':
+                    if (e.ctrlKey) this.copToClipboard();
+                    break;
     
                 /*default:
                     this.setError();
@@ -122,7 +162,7 @@ class CalcController {
     isOperator(value){
 
         return (['+', '-', '*', '%', '/'].indexOf(value) > -1);
-        
+
     }
 
     pushOperation(value){
