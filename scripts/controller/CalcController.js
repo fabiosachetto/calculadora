@@ -3,6 +3,8 @@ class CalcController {
     constructor(){
         //O underline serve para dizer q este atributo é private
 
+        this._audio = new Audio('click.mp3'); // OBS: Essa classe Audio é uma classe da Web API ( Pesquisar Audio Web API para descobrir os métodos que podem ser utilizados)
+        this._audioOnOff = false;
         this._lastOperator = '';
         this._lastNumber = '';
 
@@ -68,12 +70,42 @@ class CalcController {
 
         this.pasteFromClipboard();
 
+        //Utilizando API para áudio
+        document.querySelectorAll('.btn-ac').forEach(btn => {
+            btn.addEventListener('dblclick', e => {
+
+                this.toggleAudio();
+
+            })
+        });
+
+    }
+
+    //Esse Método vai controlar o atributo para saber se o áudio está ligado ou desligado.
+    toggleAudio(){
+        //Verificando se o atributo é ao contrario dele mesmo. (Tenho q entender melhor, parece uma forma de if simplificado)
+        this._audioOnOff = !this._audioOnOff;
+    }
+
+    //Método para tocar o som de fato
+    playAudio(){
+        //Vai verificar se pode tocar o áudio
+        if(this._audioOnOff){
+            
+            //Forçcando o play para voltar do início.
+            this._audio.currentTime = 0;
+
+            this._audio.play();
+
+        }
     }
 
     //Método para capturar eventos do teclado
     initKeyboard(){
+        
         document.addEventListener('keyup', e => {
-            //console.log(e.key);
+            
+            this.playAudio();
 
             switch(e.key){
                 case 'Escape':
@@ -332,6 +364,9 @@ class CalcController {
     }
 
     execBtn(value){
+
+        this.playAudio();
+
         switch(value){
             case 'ac':
                 this.clearAll();
