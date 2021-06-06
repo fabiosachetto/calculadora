@@ -207,8 +207,15 @@ class CalcController {
 
     getResult(){
         
-        //join = O método join() junta todos os elementos de um array (ou um array-like object) em uma string e retorna esta string.
-        return eval(this._operation.join(""));
+        try{
+            //join = O método join() junta todos os elementos de um array (ou um array-like object) em uma string e retorna esta string.
+            //eval = é uma função de propriedade do objeto global (window) . O argumento da função eval() é uma string. Se a string representa uma expressão, eval() avalia a expressão. Se o argumento representa uma ou mais declarações em JavaScript, eval() avalia as declarações.
+            return eval(this._operation.join(""));
+        } catch(e){
+            setTimeout(() => {
+                this.setError();
+            }, 1);
+        }
 
     }
 
